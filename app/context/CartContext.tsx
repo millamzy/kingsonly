@@ -16,7 +16,7 @@ export type CartItem = {
 type CartContextType = {
     items: CartItem[];
     addToCart: (product: { id: string; name: string; price: number; image: string }, color?: string, size?: string, quantity?: number) => void;
-    removeFromCart: (id: string) => void;
+    removeFromCart: (id: string, color?: string, size?: string) => void;
     clearCart: () => void;
     cartCount: number;
 };
@@ -61,8 +61,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         });
     };
 
-    const removeFromCart = (id: string) => {
-        setItems((prev) => prev.filter((item) => item.id !== id));
+    const removeFromCart = (id: string, color?: string, size?: string) => {
+        setItems((prev) => prev.filter((item) =>
+            !(item.id === id && item.color === color && item.size === size)
+        ));
         toast.info("Item removed from cart");
     };
 

@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import ProductCard from "./components/ProductCard";
 import Footer from "./components/Footer";
 import Image from "next/image";
+import Link from "next/link";
 import { Lock, User, Scissors, Zap, Repeat, Clock, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
@@ -48,12 +49,12 @@ export default async function Home() {
             Define your altitude. This is what we do when we replace the standard.
           </p>
           <div className="flex gap-4">
-            <button className="px-8 py-4 bg-transparent border border-white/20 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all">
-              Shop Shops
-            </button>
-            <button className="px-8 py-4 bg-yellow-500 text-black rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-yellow-400 transition-all flex items-center gap-2">
+            <Link href="/collections" className="px-8 py-4 bg-transparent border border-white/20 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all flex items-center justify-center">
+              Collections
+            </Link>
+            <Link href="/shop" className="px-8 py-4 bg-yellow-500 text-black rounded-full text-xs font-black uppercase tracking-[0.2em] hover:bg-yellow-400 transition-all flex items-center gap-2">
               Shop Now <ChevronRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           {/* Slider Dots */}

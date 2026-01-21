@@ -80,7 +80,7 @@ export default function CartPage() {
                                                 <span className="text-gray-400">Qty: {item.quantity}</span>
                                             </div>
                                             <button
-                                                onClick={() => removeFromCart(item.id)}
+                                                onClick={() => removeFromCart(item.id, item.color, item.size)}
                                                 className="text-gray-500 hover:text-red-500 transition-colors"
                                             >
                                                 <Trash2 className="w-4 h-4" />
