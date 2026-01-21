@@ -98,7 +98,7 @@ export async function createProduct(formData: FormData) {
                         create: { name: result.data.categoryId },
                     }
                 } : undefined,
-            },
+            } as any,
         })
     } catch (error) {
         console.error("Create Product Error:", error)
@@ -163,7 +163,7 @@ export async function updateProduct(id: string, formData: FormData) {
                         create: { name: result.data.categoryId },
                     }
                 } : undefined,
-            },
+            } as any,
         })
     } catch (error) {
         console.error("Update Product Error:", error)
