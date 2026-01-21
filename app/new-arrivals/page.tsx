@@ -100,6 +100,7 @@ export default function NewArrivals() {
                                     {product.tag}
                                 </div>
                                 <ProductCard
+                                    id={String(product.id)}
                                     image={product.image}
                                     title={product.name}
                                     price={product.price}
