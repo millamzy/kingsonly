@@ -1,10 +1,32 @@
 "use client";
 import Link from "next/link";
-import { ShoppingBag, Search, User, Heart } from "lucide-react";
-import { useState } from "react";
+import { ShoppingBag, Search, User, Heart, X } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { cartCount } = useCart();
+  const router = useRouter();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/shop?q=${encodeURIComponent(searchQuery)}`);
+      setIsSearchOpen(false);
+    }
+  };
 
   return (
     <>
@@ -42,16 +64,21 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-6 text-black">
-          <button className="hover:text-yellow-600 transition-colors">
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="hover:text-yellow-600 transition-colors"
+          >
             <Search className="h-5 w-5" />
           </button>
-          <button className="hover:text-yellow-600 transition-colors hidden sm:block">
+          <Link href="/wishlist" className="hover:text-yellow-600 transition-colors hidden sm:block">
             <Heart className="h-5 w-5" />
-          </button>
-          <button className="hover:text-yellow-600 transition-colors relative">
+          </Link>
+          <Link href="/cart" className="hover:text-yellow-600 transition-colors relative">
             <ShoppingBag className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">0</span>
-          </button>
+            <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
+              {cartCount}
+            </span>
+          </Link>
 
           {/* Mobile hamburger */}
           <div className="flex lg:hidden">
@@ -62,6 +89,37 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
+
+      {/* Search Overlay */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in duration-200">
+          <button
+            onClick={() => setIsSearchOpen(false)}
+            className="absolute top-8 right-8 text-white hover:text-yellow-500 transition-colors"
+          >
+            <X className="w-8 h-8" />
+          </button>
+
+          <form onSubmit={handleSearchSubmit} className="w-full max-w-3xl">
+            <div className="relative border-b-2 border-white/20 focus-within:border-yellow-500 transition-colors">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="SEARCH PRODUCTS..."
+                className="w-full bg-transparent py-4 text-3xl sm:text-5xl font-black text-white uppercase tracking-tighter placeholder-white/30 focus:outline-none"
+              />
+              <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2 text-white/50 hover:text-yellow-500">
+                <Search className="w-8 h-8" />
+              </button>
+            </div>
+            <p className="mt-4 text-white/40 text-sm uppercase tracking-widest font-medium">
+              Press Enter to search
+            </p>
+          </form>
+        </div>
+      )}
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
@@ -74,7 +132,12 @@ export default function Navbar() {
             { name: "About", path: "/about" },
             { name: "Contact", path: "/contact" }
           ].map((item) => (
-            <Link key={item.name} href={item.path} className="text-4xl font-black text-black uppercase tracking-tighter hover:text-yellow-600">
+            <Link
+              key={item.name}
+              href={item.path}
+              onClick={() => setIsMenuOpen(false)}
+              className="text-4xl font-black text-black uppercase tracking-tighter hover:text-yellow-600"
+            >
               {item.name}
             </Link>
           ))}

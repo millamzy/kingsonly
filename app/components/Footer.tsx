@@ -34,7 +34,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="mt-24 border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-600 text-xs uppercase tracking-wider">
-                    <p>&copy; 2026 Kingsonly. All rights reserved.</p>
+                    <p>&copy; 2026 AGSTYLES Technology Limited. All rights reserved.</p>
                     <div className="flex space-x-8 mt-4 md:mt-0">
                         <a href="#" className="hover:text-white transition-colors">Instagram</a>
                         <a href="#" className="hover:text-white transition-colors">Twitter</a>

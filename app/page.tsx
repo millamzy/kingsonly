@@ -4,37 +4,16 @@ import Footer from "./components/Footer";
 import Image from "next/image";
 import { Lock, User, Scissors, Zap, Repeat, Clock, ChevronLeft, ChevronRight, Play } from "lucide-react";
 
-export default function Home() {
-  const products = [
-    {
-      id: 1,
-      name: "Shadow Bomber",
-      price: "$2,500",
-      category: "Outerwear",
-      image: "/images/jacket.png",
-    },
-    {
-      id: 2,
-      name: "Midas Kicks",
-      price: "$1,200",
-      category: "Footwear",
-      image: "/images/sneakers.png",
-    },
-    {
-      id: 3,
-      name: "Void Runner",
-      price: "$980",
-      category: "Footwear",
-      image: "/images/sneakers.png",
-    },
-    {
-      id: 4,
-      name: "Onyx Leather",
-      price: "$3,100",
-      category: "Outerwear",
-      image: "/images/jacket.png",
-    },
-  ];
+import { prisma } from "@/lib/prisma";
+
+export default async function Home() {
+  const products = await prisma.product.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: 8,
+    include: {
+      category: true,
+    }
+  });
 
   const features = [
     { icon: Lock, label: "Top Selected Colors" },
@@ -181,21 +160,23 @@ export default function Home() {
           {products.map((product) => (
             <ProductCard
               key={product.id}
-              image={product.image}
+              id={product.id}
+              image={product.images || '/images/jacket.png'}
               title={product.name}
-              price={product.price}
-              category={product.category}
+              price={`$${Number(product.price).toFixed(2)}`}
+              category={product.category?.name || 'Uncategorized'}
               variant="light"
             />
           ))}
           {/* Duplicate for demo filling */}
           {products.map((product) => (
             <ProductCard
-              key={`dup-${product.id}`}
-              image={product.image}
+              key={`dup-${product.id}`} // Ensure unique keys
+              id={product.id}
+              image={product.images || '/images/jacket.png'}
               title={product.name}
-              price={product.price}
-              category={product.category}
+              price={`$${Number(product.price).toFixed(2)}`}
+              category={product.category?.name || 'Uncategorized'}
               variant="light"
             />
           ))}

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Oswald, Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from 'sonner';
+import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -27,7 +30,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${oswald.variable} antialiased bg-black text-white selection:bg-yellow-500 selection:text-black`}
       >
-        {children}
+        <WishlistProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </WishlistProvider>
+        <Toaster dir="auto" invert richColors />
       </body>
     </html>
   );

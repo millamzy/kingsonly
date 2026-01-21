@@ -1,12 +1,27 @@
-export default function AdminProductsPage() {
-    return (
-        <div>
-            <h1 className="font-display text-4xl font-bold text-white">Products</h1>
-            <p className="mt-2 text-zinc-400">Manage your product inventory here.</p>
+import { prisma } from '@/lib/prisma'
+import ProductList from './components/ProductList'
 
-            <div className="mt-8 rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center text-zinc-500">
-                Products list will appear here.
+export const dynamic = 'force-dynamic'
+
+export default async function AdminProductsPage() {
+    const products = await prisma.product.findMany({
+        orderBy: { createdAt: 'desc' },
+    })
+
+    // Transform Decimal to number for client component
+    const localizedProducts = products.map(p => ({
+        ...p,
+        price: p.price.toNumber(),
+    }))
+
+    return (
+        <div className="space-y-8">
+            <div>
+                <h1 className="font-display text-4xl font-bold text-white">Products</h1>
+                <p className="mt-2 text-zinc-400">Manage your product inventory here.</p>
             </div>
+
+            <ProductList initialProducts={localizedProducts} />
         </div>
-    );
+    )
 }

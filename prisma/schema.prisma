@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "library"
 }
 
@@ -26,23 +26,25 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
   description String?
   price       Decimal
-  stock       Int      @default(0)
-  images      String?  // Can be a JSON string or comma-separated if simple
+  stock       Int         @default(0)
+  images      String? // Can be a JSON string or comma-separated if simple
+  colors      String[]
+  sizes       String[]
   categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
 }
 
 model Category {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  products  Product[]
+  id       String    @id @default(cuid())
+  name     String    @unique
+  products Product[]
 }
 
 model Order {
