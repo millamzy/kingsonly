@@ -9,10 +9,16 @@ export default async function AdminProductsPage() {
     })
 
     // Transform Decimal to number for client component
-    const localizedProducts = products.map(p => ({
-        ...p,
-        price: p.price.toNumber(),
-    }))
+    const localizedProducts = products.map(p => {
+        // Cast to any to handle potential type mismatch with outdated client
+        const safeP = p as any;
+        return {
+            ...p,
+            price: p.price.toNumber(),
+            colors: safeP.colors || [],
+            sizes: safeP.sizes || [],
+        };
+    })
 
     return (
         <div className="space-y-8">
