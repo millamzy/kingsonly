@@ -7,14 +7,23 @@ import { Scissors, ChevronLeft, ChevronRight, Play, Gem, Truck, CreditCard, Refr
 
 import { prisma } from "@/lib/prisma";
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
-  const products = await prisma.product.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 8,
-    include: {
-      category: true,
-    }
-  });
+  let products: any[] = [];
+
+  try {
+    products = await prisma.product.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 8,
+      include: {
+        category: true,
+      }
+    });
+  } catch (error) {
+    console.error('Failed to fetch products:', error);
+  }
 
   const features = [
     { icon: Gem, label: "Premium Fabrics" },

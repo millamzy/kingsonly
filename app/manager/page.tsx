@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { Package, ShoppingBag, TrendingUp, AlertCircle } from "lucide-react";
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 async function getManagerStats() {
     try {
         const [productCount, orderCount] = await Promise.all([
