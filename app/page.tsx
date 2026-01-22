@@ -3,7 +3,7 @@ import ProductCard from "./components/ProductCard";
 import Footer from "./components/Footer";
 import Image from "next/image";
 import Link from "next/link";
-import { Lock, User, Scissors, Zap, Repeat, Clock, ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { Scissors, ChevronLeft, ChevronRight, Play, Gem, Truck, CreditCard, RefreshCw, ShieldCheck } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 
@@ -17,12 +17,12 @@ export default async function Home() {
   });
 
   const features = [
-    { icon: Lock, label: "Top Selected Colors" },
-    { icon: User, label: "Wear Patient Cuts" },
-    { icon: Scissors, label: "Free Carving" },
-    { icon: Zap, label: "Charge Cards" },
-    { icon: Repeat, label: "Rate Try Coats" },
-    { icon: Clock, label: "Keep Try Cohort" },
+    { icon: Gem, label: "Premium Fabrics" },
+    { icon: Scissors, label: "Exclusive Cuts" },
+    { icon: Truck, label: "Global Shipping" },
+    { icon: CreditCard, label: "Secure Payments" },
+    { icon: RefreshCw, label: "Easy Returns" },
+    { icon: ShieldCheck, label: "Authentic Gear" },
   ];
 
   return (
@@ -99,6 +99,7 @@ export default async function Home() {
       </div>
 
       {/* Dark Split Section: Collection Highlight */}
+      {/* Dark Split Section: Collection Highlight */}
       <section className="bg-black py-32 relative z-20">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row gap-20">
           {/* Text Side */}
@@ -111,37 +112,61 @@ export default async function Home() {
             <p className="text-gray-400 text-sm leading-relaxed mb-10 max-w-sm">
               Every cut feels like a revelation. Define a new era of style with our exclusive minimalist drops.
             </p>
-            <a href="#" className="inline-flex items-center gap-2 text-white uppercase tracking-widest text-xs font-bold hover:text-yellow-500 transition-colors">
+            <Link href="/collections" className="inline-flex items-center gap-2 text-white uppercase tracking-widest text-xs font-bold hover:text-yellow-500 transition-colors">
               Explore Collection <span className="w-8 h-[1px] bg-yellow-500"></span>
-            </a>
+            </Link>
           </div>
 
           {/* Images Grid Side */}
           <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Image 1 */}
             <div className="relative h-[400px] group overflow-hidden">
-              <Image src="/images/hero.png" alt="Col 1" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase">Sale</div>
-              <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                <p className="uppercase font-bold text-sm">Hoodies</p>
-              </div>
+              <Link href={products[0] ? `/shop/${products[0].id}` : '#'}>
+                <Image
+                  src={products[0]?.images || "/images/hero.png"}
+                  alt={products[0]?.name || "Collection Item"}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase">Sale</div>
+                <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="uppercase font-bold text-sm">{products[0]?.name || "Hoodies"}</p>
+                </div>
+              </Link>
             </div>
             {/* Image 2 - Center Focus */}
             <div className="relative h-[400px] md:-mt-12 group overflow-hidden border border-white/10">
-              <Image src="/images/jacket.png" alt="Col 2" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-yellow-500 hover:text-black transition-all">
-                  <Play className="w-4 h-4 fill-current" />
-                </button>
-              </div>
+              <Link href={products[1] ? `/shop/${products[1].id}` : '#'}>
+                <Image
+                  src={products[1]?.images || "/images/jacket.png"}
+                  alt={products[1]?.name || "Collection Item"}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <button className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-yellow-500 hover:text-black transition-all">
+                    <Play className="w-4 h-4 fill-current" />
+                  </button>
+                </div>
+                <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="uppercase font-bold text-sm">{products[1]?.name || "Jackets"}</p>
+                </div>
+              </Link>
             </div>
             {/* Image 3 */}
             <div className="relative h-[400px] group overflow-hidden">
-              <Image src="/images/sneakers.png" alt="Col 3" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute top-4 right-4 bg-white text-black text-[10px] font-bold px-2 py-1 uppercase">New</div>
-              <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                <p className="uppercase font-bold text-sm">Techwear</p>
-              </div>
+              <Link href={products[2] ? `/shop/${products[2].id}` : '#'}>
+                <Image
+                  src={products[2]?.images || "/images/sneakers.png"}
+                  alt={products[2]?.name || "Collection Item"}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute top-4 right-4 bg-white text-black text-[10px] font-bold px-2 py-1 uppercase">New</div>
+                <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <p className="uppercase font-bold text-sm">{products[2]?.name || "Techwear"}</p>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
