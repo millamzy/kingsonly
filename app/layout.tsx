@@ -4,6 +4,8 @@ import "./globals.css";
 import { Toaster } from 'sonner';
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
+import { AuthProvider } from "./context/AuthContext";
+
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -30,11 +32,13 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${oswald.variable} antialiased bg-black text-white selection:bg-yellow-500 selection:text-black`}
       >
-        <WishlistProvider>
-          <CartProvider>
-            {children}
-          </CartProvider>
-        </WishlistProvider>
+        <AuthProvider>
+          <WishlistProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </WishlistProvider>
+        </AuthProvider>
         <Toaster dir="auto" invert richColors />
       </body>
     </html>

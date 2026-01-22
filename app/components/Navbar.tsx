@@ -4,14 +4,18 @@ import { ShoppingBag, Search, User, Heart, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { cartCount } = useCart();
+  const { user, logout } = useAuth();
   const router = useRouter();
   const searchInputRef = useRef<HTMLInputElement>(null);
+
 
 
   useEffect(() => {
@@ -70,6 +74,30 @@ export default function Navbar() {
           >
             <Search className="h-5 w-5" />
           </button>
+
+          {user ? (
+            <div className="relative group">
+              <Link href={user.role === 'ADMIN' ? '/admin' : '/dashboard/profile'} className="hover:text-yellow-600 transition-colors">
+                <User className="h-5 w-5 text-yellow-500" />
+              </Link>
+              {/* Dropdown */}
+              <div className="absolute right-0 top-full mt-2 w-48 bg-white text-black rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="px-4 py-2 border-b border-gray-100">
+                  <p className="text-xs font-bold uppercase">{user.name}</p>
+                  <p className="text-[10px] text-gray-500 truncate">{user.email}</p>
+                </div>
+                {user.role === 'ADMIN' && (
+                  <Link href="/admin" className="block px-4 py-2 text-sm hover:bg-gray-100">Admin Dashboard</Link>
+                )}
+                <Link href="/dashboard/profile" className="block px-4 py-2 text-sm hover:bg-gray-100">My Account</Link>
+                <button onClick={logout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</button>
+              </div>
+            </div>
+          ) : (
+            <Link href="/login" className="hover:text-yellow-600 transition-colors">
+              <User className="h-5 w-5" />
+            </Link>
+          )}
           <Link href="/wishlist" className="hover:text-yellow-600 transition-colors hidden sm:block">
             <Heart className="h-5 w-5" />
           </Link>

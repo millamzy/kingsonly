@@ -1,9 +1,37 @@
 
+'use client';
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
+import { useState, useTransition } from "react";
+import { submitContactForm } from "../actions/contact";
+import { toast } from "sonner";
 
 export default function Contact() {
+    const [isPending, startTransition] = useTransition();
+
+    const handleSubmit = async (formData: FormData) => {
+        startTransition(async () => {
+            const result = await submitContactForm(formData);
+
+            if (result.error) {
+                if (typeof result.error === 'string') {
+                    toast.error(result.error);
+                } else {
+                    // Show dataset validation errors
+                    const firstError = Object.values(result.error)[0]?.[0];
+                    toast.error(firstError || "Validation failed");
+                }
+            } else {
+                toast.success("Message sent successfully! We'll get back to you soon.");
+                // Reset form
+                const form = document.getElementById("contact-form") as HTMLFormElement;
+                form?.reset();
+            }
+        });
+    };
+
     return (
         <main className="bg-black min-h-screen text-white font-sans selection:bg-yellow-500 selection:text-black">
             <Navbar />
@@ -67,33 +95,37 @@ export default function Contact() {
                         <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 blur-[50px] pointer-events-none"></div>
 
                         <h3 className="text-2xl font-bold uppercase tracking-widest mb-8">Send a Message</h3>
-                        <form className="space-y-6">
+                        <form id="contact-form" action={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Name</label>
-                                    <input type="text" className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider" placeholder="John Doe" />
+                                    <input name="name" type="text" required className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider" placeholder="John Doe" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Email</label>
-                                    <input type="email" className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider" placeholder="john@example.com" />
+                                    <input name="email" type="email" required className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider" placeholder="john@example.com" />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Subject</label>
-                                <select className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider appearance-none">
-                                    <option>General Inquiry</option>
-                                    <option>Order Support</option>
-                                    <option>Wholesale</option>
-                                    <option>Collaboration</option>
+                                <select name="subject" className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider appearance-none">
+                                    <option value="General Inquiry">General Inquiry</option>
+                                    <option value="Order Support">Order Support</option>
+                                    <option value="Wholesale">Wholesale</option>
+                                    <option value="Collaboration">Collaboration</option>
                                 </select>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-bold uppercase tracking-widest text-gray-500">Message</label>
-                                <textarea rows={5} className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider" placeholder="Write your message here..."></textarea>
+                                <textarea name="message" required rows={5} className="w-full bg-black border border-white/10 px-4 py-3 text-white outline-none focus:border-yellow-500 transition-colors uppercase text-sm tracking-wider" placeholder="Write your message here..."></textarea>
                             </div>
 
-                            <button type="button" className="w-full bg-white text-black py-4 font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-yellow-500 transition-colors mt-4">
-                                Send Message <Send className="w-4 h-4" />
+                            <button type="submit" disabled={isPending} className="w-full bg-white text-black py-4 font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-yellow-500 transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {isPending ? (
+                                    <>Sending <Loader2 className="w-4 h-4 animate-spin" /></>
+                                ) : (
+                                    <>Send Message <Send className="w-4 h-4" /></>
+                                )}
                             </button>
                         </form>
                     </div>
